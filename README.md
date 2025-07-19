@@ -1,2 +1,5 @@
-# eco-resourse
-EcoHero is a community-focused web application that helps users discover local eco-friendly resources and learn how to sort their waste through an engaging interactive game.
+# Sustainable Resources Locator
+
+## 🎯 Project Overview
+
+A web application that helps users find sustainable resources in their area including but not limited to recycling centers, compost drop-offs, zero-waste stores, community gardens, and bike repair stations.
