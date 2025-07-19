@@ -5,8 +5,7 @@ import MapContainer from "@/components/Map/MapContainer";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { DEFAULT_MAP_CONFIG } from "../../lib/constants/categories";
-import { SAMPLE_RESOURCES } from "../../lib/data/resources";
-import { Resource } from "@/types/resources";
+import { RawResource, Resource, ResourceCategory } from "@/types/resources";
 import { CATEGORY_CONFIG } from "../../lib/constants/categories";
 
 export default function Map() {
@@ -19,7 +18,6 @@ export default function Map() {
   const [mapZoom, setMapZoom] = useState(DEFAULT_MAP_CONFIG.zoom);
 
   useEffect(() => {
-    // Simulate loading data
     const loadResources = async () => {
       try {
         const googleSheetsURL = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_URL;
@@ -28,28 +26,47 @@ export default function Map() {
             "Google Sheets URL is not defined in environment variables."
           );
         }
+
         const response = await fetch(googleSheetsURL);
         const data = await response.json();
 
-        const formattedResources = data.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          category: item.category,
-          address: item.address,
-          coordinates: {
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lng),
-          },
-          phone: item.phone,
-          website: item.website,
-          hours: item.hours,
-          description: item.description,
-          acceptedItems:
-            item.acceptedItems?.split(",").map((s: string) => s.trim()) ?? [],
-          verified: item.verified === "TRUE" || item.verified === true,
-          rating: parseFloat(item.rating),
-          lastUpdated: new Date(item.lastUpdated),
-        }));
+        if (!Array.isArray(data)) {
+          throw new Error("Fetched data is not an array.");
+        }
+
+        for (const item of data) {
+          if (typeof item !== "object" || item === null) {
+            throw new Error("Each resource must be an object.");
+          }
+          if (typeof item.id !== "string") {
+            throw new Error("Resource 'id' must be a string.");
+          }
+        }
+
+        const formattedResources: Resource[] = (data as RawResource[]).map(
+          (item) => ({
+            id: item.id,
+            name: item.name,
+            category: isValidCategory(item.category)
+              ? item.category
+              : ResourceCategory.RECYCLING, // fallback
+            address: item.address,
+            coordinates: {
+              lat: parseFloat(item.lat),
+              lng: parseFloat(item.lng),
+            },
+            phone: item.phone || undefined,
+            website: item.website || undefined,
+            hours: item.hours || undefined,
+            description: item.description || undefined,
+            acceptedItems: item.acceptedItems
+              ? item.acceptedItems.split(",").map((s) => s.trim())
+              : [],
+            verified: item.verified === "TRUE" || item.verified === true,
+            rating: item.rating ? parseFloat(item.rating) : undefined,
+            lastUpdated: new Date(item.lastUpdated),
+          })
+        );
 
         console.log("Fetched resources:", formattedResources);
         setResources(formattedResources);
@@ -67,6 +84,10 @@ export default function Map() {
     setSelectedResource(resource);
     setMapCenter(resource.coordinates);
     setMapZoom(15);
+  };
+
+  const isValidCategory = (val: string): val is ResourceCategory => {
+    return Object.values(ResourceCategory).includes(val as ResourceCategory);
   };
 
   if (loading) {

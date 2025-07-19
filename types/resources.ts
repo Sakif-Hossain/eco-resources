@@ -29,6 +29,23 @@ export interface Resource {
   lastUpdated: Date;
 }
 
+export type RawResource = {
+  id: string;
+  name: string;
+  category: string;
+  address: string;
+  lat: string;
+  lng: string;
+  phone?: string;
+  website?: string;
+  hours?: string;
+  description?: string;
+  acceptedItems?: string;
+  verified?: string | boolean;
+  rating?: string;
+  lastUpdated: string;
+};
+
 export interface FilterState {
   categories: ResourceCategory[];
   searchQuery: string;

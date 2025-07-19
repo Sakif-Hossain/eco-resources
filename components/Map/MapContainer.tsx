@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { MapProps } from "@/types/map";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -22,7 +21,7 @@ const MapContainer: React.FC<MapProps> = (props) => {
     );
   }
 
-  const render = (status: any) => {
+  const render = (status: string) => {
     if (status === "LOADING") {
       return <LoadingSpinner />;
     }
