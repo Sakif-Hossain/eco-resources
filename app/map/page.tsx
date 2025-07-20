@@ -16,6 +16,7 @@ export default function Map() {
   const [loading, setLoading] = useState(true);
   const [mapCenter, setMapCenter] = useState(DEFAULT_MAP_CONFIG.center);
   const [mapZoom, setMapZoom] = useState(DEFAULT_MAP_CONFIG.zoom);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   useEffect(() => {
     const loadResources = async () => {
@@ -84,6 +85,9 @@ export default function Map() {
     setSelectedResource(resource);
     setMapCenter(resource.coordinates);
     setMapZoom(15);
+    if (window.innerWidth < 768) {
+      setIsPanelOpen(false);
+    }
   };
 
   const isValidCategory = (val: string): val is ResourceCategory => {
@@ -102,17 +106,76 @@ export default function Map() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] flex">
+    <div className="h-[calc(100vh-64px)] flex relative">
+      {/* Mobile bookmark toggle button */}
+      <button
+        onClick={() => setIsPanelOpen(!isPanelOpen)}
+        className={`
+          md:hidden fixed top-1/2 -translate-y-1/2 z-50 
+          bg-white shadow-lg border border-gray-200 hover:bg-gray-50 
+          transition-all duration-300 ease-in-out
+          ${isPanelOpen ? "left-80" : "left-0"}
+          rounded-r-md border-l-0
+          px-2 py-4 min-h-[60px] flex items-center
+        `}
+        aria-label={isPanelOpen ? "Close panel" : "Open panel"}
+      >
+        <div className="flex flex-col items-center space-y-1">
+          <div className="w-4 h-0.5 bg-gray-600 rounded"></div>
+          <div className="w-4 h-0.5 bg-gray-600 rounded"></div>
+          <div className="w-4 h-0.5 bg-gray-600 rounded"></div>
+        </div>
+      </button>
+
+      {/* Backdrop for mobile */}
+      {isPanelOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-25 z-30"
+          onClick={() => setIsPanelOpen(false)}
+        />
+      )}
+
       {/* Sidebar with resource info */}
-      <div className="w-80 bg-white shadow-lg flex flex-col">
+      <div
+        className={`
+          w-80 bg-white shadow-lg flex flex-col z-40
+          md:relative md:translate-x-0 md:shadow-lg
+          fixed left-0 top-0 h-full transition-transform duration-300 ease-in-out
+          ${isPanelOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
         {/* Fixed header */}
         <div className="p-4 border-b border-gray-200 flex-shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Sustainable Resources
-          </h2>
-          <p className="text-sm text-gray-600 mt-1">
-            {resources.length} locations found
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Sustainable Resources
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {resources.length} locations found
+              </p>
+            </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setIsPanelOpen(false)}
+              className="md:hidden p-1 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close panel"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Scrollable content */}
