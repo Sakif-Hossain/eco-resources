@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,11 +19,11 @@ const Navbar = () => {
           {/* Logo/Brand */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">♻️</span>
+              <div className="w-4 h-4 flex items-center justify-center">
+                <Image src="/logo.png" width={500} height={500} alt="logo" />
               </div>
               <span className="font-bold text-xl text-gray-900">
-                EcoResource
+                EcoResources
               </span>
             </Link>
           </div>

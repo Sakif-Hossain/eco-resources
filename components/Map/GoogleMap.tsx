@@ -37,7 +37,7 @@ export const GoogleMapComponent: React.FC<GoogleMapProps> = ({
       markers.forEach((marker) => marker.setMap(null));
       setMarkers([]);
     };
-  }, [mapId]);
+  }, [mapId, center, zoom, markers]);
 
   useEffect(() => {
     if (!map) return;
