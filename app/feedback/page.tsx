@@ -128,7 +128,7 @@ export default function FeedbackPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            We'd Love Your Feedback
+            We&apos;d Love Your Feedback
           </h1>
           <p className="text-lg text-gray-600">
             Help us improve by sharing your thoughts, reporting issues, or
@@ -146,7 +146,7 @@ export default function FeedbackPage() {
                   Thank you for your feedback!
                 </h3>
                 <p className="text-sm text-green-600 mt-1">
-                  We've received your message and will review it soon.
+                  We&apos;ve received your message and will review it soon.
                 </p>
               </div>
             </div>
