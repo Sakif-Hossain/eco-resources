@@ -43,6 +43,12 @@ export const CATEGORY_CONFIG = {
     icon: "♻️",
     description: "Bicycle maintenance and repair locations",
   },
+  [ResourceCategory.OUTFIT_REPAIR]: {
+    label: "Outfit Repair",
+    color: "#964B00", // Brown
+    icon: "👔",
+    description: "Outfit alteration and shoe repairing locations",
+  },
 };
 
 export const DEFAULT_MAP_CONFIG = {
