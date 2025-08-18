@@ -6,6 +6,7 @@ export enum ResourceCategory {
   BIKE_REPAIR = "BIKE_REPAIR",
   WAWANESA_HQ = "WAWANESA_HQ",
   R4_DEPOT = "R4_DEPOT",
+  OUTFIT_REPAIR = "OUTFIT_REPAIR",
 }
 
 export interface Coordinates {
